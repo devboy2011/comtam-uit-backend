@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(
   cors({
     origin: [
-      process.env.CORS_ORIGIN || 'http://localhost:5173',
+      `${process.env.CORS_ORIGIN}` || 'http://localhost:5173',
       `http://localhost:${process.env.PORT}` || 'http://localhost:3055'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
