@@ -26,7 +26,7 @@ app.use(
   cors({
     origin: [
       process.env.CORS_ORIGIN || 'http://localhost:5173',
-      process.env.PORT || 'http://localhost:3055'
+      `http://localhost:${process.env.PORT}` || 'http://localhost:3055'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
