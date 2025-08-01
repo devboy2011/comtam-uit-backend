@@ -3,5 +3,5 @@ module.exports = {
   vnp_HashSecret:process.env.VNPAY_HASHSECRET,
   vnp_Url : "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
   vnp_Api : "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction",
-  vnp_ReturnUrl :  `https://localhost:443/api/v0/order/vnpay_return` 
+  vnp_ReturnUrl :  `http://my-ticket-backend.onrender.com/api/v0/order/vnpay_return` 
 }
