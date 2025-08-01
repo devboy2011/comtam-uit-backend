@@ -1,4 +1,4 @@
-const app = require('./src/app')
+const app = require('./src/index')
 require('dotenv').config()
 
 const fs = require('fs')
