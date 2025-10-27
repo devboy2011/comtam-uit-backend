@@ -8,12 +8,13 @@ const userSchema = new mongoose.Schema(
   {
     email: {
       type: String,
-      required: true,
-      unique: true,
     },
     password: {
       type: String,
-      required: true,
+    },
+    phone: {
+      type: String,
+      default: null,
     },
     status: {
       type: String,
@@ -35,10 +36,6 @@ const userSchema = new mongoose.Schema(
     },
     dob: {
       type: Date,
-      default: null,
-    },
-    phone: {
-      type: String,
       default: null,
     },
     address: {

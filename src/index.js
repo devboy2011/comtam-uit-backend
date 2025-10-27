@@ -39,12 +39,10 @@ require('./dbs/init.mongodb')
 
 // Define routes
 app.use('/api/v0/auth', authRoutes);
-app.use('/api/v0/event', eventRoutes);
-app.use('/api/v0/order', orderRoutes)
+// app.use('/api/v0/order', orderRoutes)
 app.use('/api/v0/user', userRoutes);
 app.use('/api/v0/admin/auth', adminAuthRoutes);
 app.use('/api/v0/admin/event', adminEventRoutes);
-app.use('/', require('./routes'))
 
 
 // handle errors
