@@ -8,68 +8,58 @@ const COLLECTION_NAME = 'orders'
 
 const orderSchema = new mongoose.Schema(
   {
-    // Internal auto-increment
-    seq: {
-      type: Number,
-      unique: true,
-    },
-    // Public orderID "ORD001"
-    id: {
-      type: String,
-      unique: true,
-    },
-    user_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    tickets: [
-      {
-        ticket_id: {
+      user_id:{
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Ticket',
+          ref: 'User',
           required: true,
-        },
-        event_id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Event',
-        },
-        ticket_name: {
-          type: String,
-        },
-        ticket_price: {
-          type: Number,
-        },
-        ticket_quantity: {
-          type: Number,
-        },
       },
-    ],
-    price: {
-      type: Number,
+      total: {
+        type: Number,
+        default: 0,
+      },
+      products: [
+        {
+          product_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Products',
+            required: true,
+          },
+          quantity: {
+            type: Number,
+            default: 1,
+          },
+        },
+      ],
+      status: {
+          type: String,
+          enum: ['pending', 'confirmed', 'shipped', 'delivered', 'canceled'],
+          default: 'pending',
+      },
+      delivery_status: [
+        {
+          createAt: {
+            type: Date,
+            default: Date.now,
+          },
+          shippedAt: {
+              type: Date,
+              default: null,
+          },
+          deliveredAt: {
+              type: Date,
+              default: null,
+          },
+          canceledAt: {
+            type: Date,
+              default: null,
+          },
+        }
+      ]
     },
-    status: {
-      type: String,
-      enum: ['COMPLETE', 'PENDING', 'CANCEL'],
-      default: 'PENDING',
+    {
+      timestamps: true,
+      collection: COLLECTION_NAME,
     },
-  },
-  {
-    timestamps: true,
-    collection: COLLECTION_NAME,
-  },
 )
-
-// Auto-increment
-orderSchema.plugin(AutoIncrement, { inc_field: 'seq', id: 'order_seq' })
-
-// id
-orderSchema.pre('save', function (next) {
-  if (this.isNew && !this.id) {
-    // ORD001, ORD012, ...
-    this.id = `ORD${String(this.seq).padStart(3, '0')}`
-  }
-  next()
-})
 
 module.exports = mongoose.model(DOCUMENT_NAME, orderSchema)

@@ -23,13 +23,12 @@ const sessionSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        expires: '30d', // Automatically delete after 30 days
     },
     expiresAt: {
         type: Date,
         required: true,
         default: function() {
-            return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
+            return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
         }
     }
 });
