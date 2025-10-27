@@ -1,8 +1,8 @@
-const Event = require('../models/event.model');
+const Event = require('../models/discard/event.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const EventDetail = require('../models/event-details.model');
+const EventDetail = require('../models/discard/event-details.model');
 
 const { jwtSecret, jwtExpiresIn } = require('../configs/jwt.config');
 

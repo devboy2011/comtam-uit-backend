@@ -1,10 +1,10 @@
 const {CATEGORIES, RES_LOCATIONS} = require('../utils/enums')
 const {requestToresponseLocation} = require('../utils/location.mapper');
 
-const Event = require('../models/event.model');
-const BannerEvent = require('../models/banner-events.model');
-const SpecialEvent = require('../models/special-event.model');
-const EventDetails = require('../models/event-details.model');
+const Event = require('../models/discard/event.model');
+const BannerEvent = require('../models/discard/banner-events.model');
+const SpecialEvent = require('../models/discard/special-event.model');
+const EventDetails = require('../models/discard/event-details.model');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
