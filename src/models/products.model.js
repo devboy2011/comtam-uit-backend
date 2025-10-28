@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose')
 const { v4: uuidv4 } = require('uuid')
+const slugify = require('slugify')
 
 const DOCUMENT_NAME = 'Products'
 const COLLECTION_NAME = 'products'
@@ -12,6 +13,15 @@ const productSchema = new mongoose.Schema(
       type: String,
       unique: true,
       default: uuidv4,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
     },
     price: {
       type: Number,
@@ -46,5 +56,12 @@ const productSchema = new mongoose.Schema(
     collection: COLLECTION_NAME,
   },
 )
+
+productSchema.index({ name: 'text', desc: 'text' })
+
+productSchema.pre('save', async function (next) {
+  this.slug = this.slug || slugify(this.name);
+  next();
+});
 
 module.exports = mongoose.model(DOCUMENT_NAME, productSchema)

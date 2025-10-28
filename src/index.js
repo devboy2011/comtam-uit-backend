@@ -9,6 +9,7 @@ const orderRoutes = require('./routes/order.routes')
 const userRoutes = require('./routes/user.routes')
 const adminAuthRoutes = require('./routes/admin.auth.routes')
 const adminEventRoutes = require('./routes/admin.event.routes')
+const productRoutes = require('./routes/product.routes')
 
 const app = express()
 
@@ -42,8 +43,7 @@ app.use('/api/v0/auth', authRoutes);
 // app.use('/api/v0/order', orderRoutes)
 app.use('/api/v0/user', userRoutes);
 app.use('/api/v0/admin/auth', adminAuthRoutes);
-app.use('/api/v0/admin/event', adminEventRoutes);
-
+app.use('/api/v0/product', productRoutes);
 
 // handle errors
 app.use((req, res, next) => {
