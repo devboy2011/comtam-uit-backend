@@ -45,39 +45,44 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body
+    const { email, password, tele } = req.body
+    let existingUser;
 
-    // Kiểm tra user tồn tại
-    const existingUser = await User.findOne({ email })
-
-    if (!existingUser)
+    if (!tele) {
+      existingUser = await User.findOne({ email })
+      
+      // Kiểm tra user tồn tại
+      if (!existingUser)
       return res.status(401).json({ error: 'Invalid email or password' })
 
-    // So sánh mật khẩu
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      existingUser.password,
-    )
+      // So sánh mật khẩu
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        existingUser.password,
+      )
+  
+      if (!isPasswordValid)
+        return res.status(401).json({ error: 'Invalid password' })
+    } 
+    else {
+      existingUser = await User.findOne({ tele })
+      if (!existingUser)
+        return res.status(401).json({ error: 'Bạn chưa đăng kí tài khoản' });
+    }
 
-    if (!isPasswordValid)
-      return res.status(401).json({ error: 'Invalid password' })
-
+    // Xoá session cũ nếu có
     const existingSession = await Session.findOne({ userId: existingUser._id })
 
     if (existingSession) {
-      await Session.deleteOne({ userId: existingUser._id })
-
-      console.log(
-        'Deleted existing session for user with email:',
-        existingUser.email,
-      )
+      Session.deleteOne({ userId: existingUser._id })
     }
 
     const sessionToken = uuidv4()
     const accessToken = jwt.sign(
       {
         userId: existingUser._id,
-        email: existingUser.email,
+        email: existingUser.email ||  '',
+        tele: existingUser.tele ||  '',
         roles: existingUser.roles,
         sessionToken,
       },
@@ -88,14 +93,14 @@ exports.login = async (req, res) => {
     const refreshToken = jwt.sign(
       { userId: existingUser._id, sessionToken },
       jwtSecret,
-      { expiresIn: '30d' }, // Refresh token expires in 30 days
+      { expiresIn: '7d' }, // Refresh token expires in 7 days
     )
 
     await Session.create({
       userId: existingUser._id,
       sessionToken,
       refreshToken,
-      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
     })
 
     return res.status(200).json({

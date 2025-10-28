@@ -22,13 +22,24 @@ const productSchema = new mongoose.Schema(
       default: 0,
     },
     desc: {
-        type: String,
-        default: "Chưa có mô tả"
+      type: String,
+      default: "Chưa có mô tả"
     },
     img: {
-        type: String,
-        default: "https://via.placeholder.com/150"
-    }
+      type: String,
+      default: "https://via.placeholder.com/150"
+    },
+    category_list: [{
+      category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+        required: true,
+      },
+      category_id: {
+          type: Number,
+          required: true,
+      }
+    }]
   },
   {
     timestamps: true,
