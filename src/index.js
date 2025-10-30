@@ -4,19 +4,10 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const authRoutes = require('./routes/auth.routes')
-const eventRoutes = require('./routes/event.routes')
-const orderRoutes = require('./routes/order.routes')
-const userRoutes = require('./routes/user.routes')
-const adminAuthRoutes = require('./routes/admin.auth.routes')
-const adminEventRoutes = require('./routes/admin.event.routes')
 const productRoutes = require('./routes/product.routes')
+const categoryRoutes = require('./routes/category.routes')
 
 const app = express()
-
-// const httpsOptions = {
-//   key: './cert/cert-key.pem',
-//   cert: './cert/cert.pem'
-// }
 
 // init middlewares
 app.use(express.json())
@@ -40,10 +31,8 @@ require('./dbs/init.mongodb')
 
 // Define routes
 app.use('/api/v0/auth', authRoutes);
-// app.use('/api/v0/order', orderRoutes)
-app.use('/api/v0/user', userRoutes);
-app.use('/api/v0/admin/auth', adminAuthRoutes);
 app.use('/api/v0/product', productRoutes);
+app.use('/api/v0/category', categoryRoutes);
 
 // handle errors
 app.use((req, res, next) => {

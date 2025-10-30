@@ -90,3 +90,18 @@ exports.getProductByKeyword = async (req, res) => {
     }
 }
 
+exports.createProduct = async (req, res) => {
+    try {
+        const { name, price, desc, category_list, slug } = req.body;
+
+        const newProduct = await Product.create({ name, price, desc, slug, category_list });
+
+        res.status(201).json({
+            message: 'Product created successfully',
+            body: newProduct,
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Service not supported" });
+    }
+}
+

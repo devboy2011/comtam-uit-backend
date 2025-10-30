@@ -1,6 +1,7 @@
 'use strict'
 
 const mongoose = require('mongoose')
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const DOCUMENT_NAME = 'Category'
 const COLLECTION_NAME = 'categories'
@@ -17,7 +18,7 @@ const categorySchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,
+    timestamps: false,
     collection: COLLECTION_NAME,
   },
 )

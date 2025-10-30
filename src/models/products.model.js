@@ -20,7 +20,6 @@ const productSchema = new mongoose.Schema(
     },
     slug: {
       type: String,
-      required: true,
       unique: true,
     },
     price: {
@@ -29,7 +28,7 @@ const productSchema = new mongoose.Schema(
     },
     remained: {
       type: Number,
-      default: 0,
+      default: 10,
     },
     desc: {
       type: String,
@@ -40,13 +39,12 @@ const productSchema = new mongoose.Schema(
       default: "https://via.placeholder.com/150"
     },
     category_list: [{
-      category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-        required: true,
-      },
       category_id: {
           type: Number,
+          required: true,
+      },
+      name: {
+          type: String,
           required: true,
       }
     }]
