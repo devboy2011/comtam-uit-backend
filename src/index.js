@@ -6,6 +6,7 @@ const cors = require('cors')
 const authRoutes = require('./routes/auth.routes')
 const productRoutes = require('./routes/product.routes')
 const categoryRoutes = require('./routes/category.routes')
+const userRoutes = require('./routes/user.routes')
 
 const app = express()
 
@@ -33,6 +34,7 @@ require('./dbs/init.mongodb')
 app.use('/api/v0/auth', authRoutes);
 app.use('/api/v0/product', productRoutes);
 app.use('/api/v0/category', categoryRoutes);
+app.use('/api/v0/user', userRoutes);
 
 // handle errors
 app.use((req, res, next) => {
