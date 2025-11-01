@@ -14,6 +14,24 @@ router.get('/my-cart',
     cartController.getMyCart
 )
 
+router.post('/add-to-cart',
+    authMiddleware,
+    authorizeRoles(['CUSTOMER']),
+    cartController.addToCart
+)
+
+router.put('/update-cart-item',
+    authMiddleware,
+    authorizeRoles(['CUSTOMER']),
+    cartController.updateCartItem
+)
+
+router.delete('/remove-cart-item',
+    authMiddleware,
+    authorizeRoles(['CUSTOMER']),
+    cartController.removeCartItem
+)
+
 router.get('/orders',  
     authMiddleware,
     authorizeRoles(['CUSTOMER']),
