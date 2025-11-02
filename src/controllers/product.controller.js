@@ -1,4 +1,5 @@
 const Product = require('../models/products.model');
+const  removeAccents = require('../utils/removeAccent.js') ;
 
 exports.getProductList = async (req, res) => {    
     try {
@@ -64,15 +65,23 @@ exports.getProductByKeyword = async (req, res) => {
     try {
         const { keySearch } = req.query;
         
-        const regexSearch = new RegExp(keySearch, 'i'); // 'i' for case-insensitive
+        console.log('Key Search:', keySearch);
+
+        const normalizedKeySearch = removeAccents(keySearch);
         
+        const regexSearch = new RegExp(keySearch, 'i'); // 'i' for case-insensitive
+        const normalizedRegexSearch = new RegExp(normalizedKeySearch, 'i');
+
         const products = await Product.find(
             {
                 $or: [
                     { name: regexSearch },
-                    { desc: regexSearch }
+                    { desc: regexSearch },
+                    { nameNonAccent: normalizedRegexSearch },
+                    { descNonAccent: normalizedRegexSearch }
                 ]
-            }
+            },
+            { name: 1, id: 1, img: 1, price: 1, slug: 1, remained: 1, desc: 1, 'category_list.category_id': 1, _id: 0 }
         );
 
         if (!products || products.length === 0) {
@@ -87,6 +96,7 @@ exports.getProductByKeyword = async (req, res) => {
             body: products,
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: "Service not supported" });
     }
 }

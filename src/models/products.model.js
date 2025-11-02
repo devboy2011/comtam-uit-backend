@@ -7,6 +7,8 @@ const slugify = require('slugify')
 const DOCUMENT_NAME = 'Products'
 const COLLECTION_NAME = 'products'
 
+const removeAccents  = require('../utils/removeAccent.js') ;
+
 const productSchema = new mongoose.Schema(
   {
     id: {
@@ -17,6 +19,11 @@ const productSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+    },
+    nameNonAccent:{
+      type: String,
+      required: true,
+      index: true,
     },
     slug: {
       type: String,
@@ -34,10 +41,16 @@ const productSchema = new mongoose.Schema(
       type: String,
       default: "Chưa có mô tả"
     },
+    descNonAccent: {
+      type: String,
+      required: true,
+      index: true,
+    },
     img: {
       type: String,
       default: "https://via.placeholder.com/150"
     },
+    
     category_list: [{
       category_id: {
           type: Number,
@@ -55,11 +68,18 @@ const productSchema = new mongoose.Schema(
   },
 )
 
-productSchema.index({ name: 'text', desc: 'text' })
-
 productSchema.pre('save', async function (next) {
   this.slug = this.slug || slugify(this.name);
+  if (this.name) {
+    this.nameNonAccent = removeAccents(this.name);
+  }
+  if (this.desc) {
+    this.descNonAccent = removeAccents(this.desc);
+  }
   next();
 });
+
+productSchema.index({ name: 'text', desc: 'text' })
+productSchema.index({ nameNonAccent: 'text', descNonAccent: 'text' })
 
 module.exports = mongoose.model(DOCUMENT_NAME, productSchema)
