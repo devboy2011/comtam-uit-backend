@@ -10,11 +10,12 @@ exports.getProductList = async (req, res) => {
         const filter = {};
         
         if (category){
-            filter['category_list.category_id'] = parseInt(category);
+            const raw = Array.isArray(category) ? category : [category];
+            filter['category_list.category_id'] = { $in: raw.map(item => parseInt(item)) };
         }
         
         const  productList = await Product
-            .find(filter, {name: 1, img: 1, price: 1, slug: 1, remained: 1, desc: 1, 'category_list.category_id': 1})
+            .find(filter, {name: 1, id: 1, img: 1, price: 1, slug: 1, remained: 1, desc: 1, 'category_list.category_id': 1, _id: 0})
             .skip(skip)
             .limit(limit)
             
@@ -105,3 +106,21 @@ exports.createProduct = async (req, res) => {
     }
 }
 
+exports.getProductById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const product = await Product.findOne({ _id: id });
+
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        res.status(200).json({
+            message: 'Product retrieved successfully',
+            body: product,
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Service not supported" });
+    }
+}

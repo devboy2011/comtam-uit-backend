@@ -2,7 +2,7 @@ const Category = require('../models/category.model');
 
 exports.getCategoryList = async (req, res) => {    
     try {
-        const categories = await Category.find({}, { category_id: 1, name: 1, _id:0});
+        const categories = await Category.find({}, { category_id: 1, name: 1, img: 1, _id: 0 });
 
         res.status(200).json({
             message: 'Categories retrieved successfully',
@@ -15,9 +15,9 @@ exports.getCategoryList = async (req, res) => {
 
 exports.createCategory = async (req, res) => {
     try {
-        const { name } = req.body;
+        const { name, img } = req.body;
 
-        const newCategory = await Category.create({ name });
+        const newCategory = await Category.create({ name, img });
 
         res.status(201).json({
             message: 'Category created successfully',

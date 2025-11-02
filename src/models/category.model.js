@@ -16,6 +16,10 @@ const categorySchema = new mongoose.Schema(
         type: String,
         required: true,
     },
+    img: {
+        type: String,
+        default: "https://via.placeholder.com/150"
+    }
   },
   {
     timestamps: false,

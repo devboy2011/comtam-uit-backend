@@ -9,7 +9,7 @@ const COLLECTION_NAME = 'products'
 
 const productSchema = new mongoose.Schema(
   {
-    product_id: {
+    id: {
       type: String,
       unique: true,
       default: uuidv4,
