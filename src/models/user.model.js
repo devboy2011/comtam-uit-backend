@@ -39,9 +39,17 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
     address: {
-      type: String,
-      default: null,
-    },
+      type: [
+        {
+          street: { type: String, default: null },
+          ward: { type: String, default: null },
+          city: { type: String, default: null },
+          isDefault: { type: Boolean, default: false },
+          createAt: { type: Date, default: Date.now },
+        },
+      ],
+      default: [],
+    }
   },
   {
     timestamps: true,
