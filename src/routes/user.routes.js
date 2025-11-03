@@ -5,6 +5,7 @@ const router = express.Router();
 const cartController = require('../controllers/cart.controller');
 const orderController = require('../controllers/order.controller');
 const deliverController = require('../controllers/deliver.controller');
+const userController = require('../controllers/user1.controller');
 
 const authMiddleware = require('../middlewares/authMiddleware');    
 const authorizeRoles = require('../middlewares/authRolesMiddleware');
@@ -79,6 +80,12 @@ router.post('/order',
     authMiddleware,
     authorizeRoles(['CUSTOMER']),
     orderController.createOrder
+)
+
+router.get('/profile',
+    authMiddleware,
+    authorizeRoles(['CUSTOMER']),
+    userController.getProfile
 )
 
 module.exports = router;
