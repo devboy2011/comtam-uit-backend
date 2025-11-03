@@ -6,18 +6,8 @@ exports.getAllDelivery = async (req, res) => {
         
         const user = await User
             .findOne({ _id: userId }, { address: 1});
-
-        if (!user.address) {
-            user.address.push({});
-            await user.save();
-            return res.status(200).json({
-                message: 'Delivery addresses created',
-            });
-        }
-
-        console.log(Array.isArray(user.address));
         
-        if (user.address.length === 0) {
+        if (!user.address || user.address.length === 0) {
             return res.status(200).json({ message: 'No delivery addresses found' });
         }
             
@@ -36,18 +26,19 @@ exports.createDelivery = async (req, res) => {
     try{
         const userId = req.user.userId;
         
-        const {street, ward, city} = req.body;
-        
-        if (!street || !ward || !city) {
+        const {street, ward, city, tele} = req.body;
+
+        if (!street || !ward || !city || !tele) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
         
         let user = await User.findOne({ _id: userId }, { address: 1 });
         if (user.address.length === 0) {
-            await user.address.push({ street, ward, city, isDefault: false });
+            await user.address.push({ street, ward, city, tele, isDefault: 1 });
+        } else {
+            await user.address.push({ street, ward, city, tele });
         }
-
-        user.address.push({ street, ward, city });
+       
         await user.save();
 
         return res.status(201).json({
@@ -98,9 +89,9 @@ exports.updateDelivery = async (req, res) => {
     try{
         const userId = req.user.userId;
         const addressId = req.params.id;
-        const { city, ward, street} = req.body;
+        const { city, ward, street, tele } = req.body;
 
-        if (!addressId || !city || !ward || !street) {
+        if (!addressId || !city || !ward || !street || !tele) {
             return res.status(400).json({
                 error: 'Missing required fields'
             });
@@ -108,13 +99,6 @@ exports.updateDelivery = async (req, res) => {
         
         const user = await User
             .findOne({ _id: userId }, { address: 1});
-        
-        if (!Array.isArray(user.address)) {
-            user.address = [user.address];
-            user.save();
-        }
-        
-        console.log(typeof user.address)
         
         if (user.address.length === 0) {
             return res.status(404).json({ 
@@ -132,6 +116,7 @@ exports.updateDelivery = async (req, res) => {
         user.address[addressIndex].city = city;
         user.address[addressIndex].ward = ward;
         user.address[addressIndex].street = street;
+        user.address[addressIndex].tele = tele;
         
         await user.save();
         

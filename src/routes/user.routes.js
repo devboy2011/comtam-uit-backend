@@ -33,12 +33,6 @@ router.delete('/remove-cart-item',
     cartController.removeCartItem
 )
 
-router.get('/orders',  
-    authMiddleware,
-    authorizeRoles(['CUSTOMER']),
-    orderController.getMyOrders
-)
-
 router.get('/delivery',
     authMiddleware,
     authorizeRoles(['CUSTOMER']),
@@ -67,6 +61,24 @@ router.put('/delivery/set-default/:id',
     authMiddleware,
     authorizeRoles(['CUSTOMER']),
     deliverController.setDefaultDelivery
+)
+
+router.get('/orders',  
+    authMiddleware,
+    authorizeRoles(['CUSTOMER']),
+    orderController.getMyOrders
+)
+
+router.get('/order/:id',
+    authMiddleware,
+    authorizeRoles(['CUSTOMER']),
+    orderController.getOrderById
+)
+
+router.post('/order',
+    authMiddleware,
+    authorizeRoles(['CUSTOMER']),
+    orderController.createOrder
 )
 
 module.exports = router;
