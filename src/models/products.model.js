@@ -22,7 +22,6 @@ const productSchema = new mongoose.Schema(
     },
     nameNonAccent:{
       type: String,
-      required: true,
       index: true,
     },
     slug: {
@@ -43,14 +42,12 @@ const productSchema = new mongoose.Schema(
     },
     descNonAccent: {
       type: String,
-      required: true,
       index: true,
     },
     img: {
       type: String,
       default: "https://via.placeholder.com/150"
     },
-    
     category_list: [{
       category_id: {
           type: Number,

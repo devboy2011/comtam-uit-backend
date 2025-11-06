@@ -103,9 +103,9 @@ exports.getProductByKeyword = async (req, res) => {
 
 exports.createProduct = async (req, res) => {
     try {
-        const { name, price, desc, category_list, slug } = req.body;
+        const { name, price, desc, category_list, slug, img } = req.body;
 
-        const newProduct = await Product.create({ name, price, desc, slug, category_list });
+        const newProduct = await Product.create({ name, price, desc, slug, category_list, img });
 
         res.status(201).json({
             message: 'Product created successfully',
