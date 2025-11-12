@@ -15,7 +15,7 @@ exports.signup = async (req, res) => {
     const existingUser = await User.findOne({ name: username })
     
     if (existingUser) {
-      return res.status(409).json({ error: 'Username already exists' })
+      return res.status(409).json({ message: 'Username already exists' })
     }
 
     // Băm mật khẩu
