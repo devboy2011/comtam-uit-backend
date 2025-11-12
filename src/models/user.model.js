@@ -38,6 +38,10 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    fullname: {
+      type: String,
+      default: null,
+    },
     address: {
       type: [
         {

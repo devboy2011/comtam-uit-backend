@@ -7,7 +7,7 @@ exports.getProfile = async (req, res) => {
 
     const user = await User
       .findOne({ _id: userId }, 
-      { email:1, name:1, 
+      { email:1, fullname:1, 
         avatar: 1, dob: 1, 
         _id: 0
       });
@@ -31,7 +31,7 @@ exports.updateProfile = async (req, res) => {
   try {
     const userId = req.user.userId
     
-    const { name, avatar, dob} = req.body
+    const { fullname, avatar, dob} = req.body
     
     let parsedDob;
     

@@ -45,15 +45,20 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email, password, tele } = req.body
+    const { username, password, tele } = req.body
     let existingUser;
 
     if (!tele) {
-      existingUser = await User.findOne({ email })
+      existingUser = await User.findOne({ name: username })
       
       // Kiểm tra user tồn tại
       if (!existingUser)
-      return res.status(401).json({ error: 'Invalid email or password' })
+        existingUser = await User.findOne({ email: username })
+      
+      if (!existingUser)
+        return res.status(401).json({ 
+          error: 'Invalid username or password' 
+        })
 
       // So sánh mật khẩu
       const isPasswordValid = await bcrypt.compare(
