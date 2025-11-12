@@ -15,18 +15,7 @@ app.use(express.json())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use(
-  cors({
-    origin: [
-      `${process.env.CORS_ORIGIN}` || 'http://localhost:5173',
-      `http://localhost:${process.env.PORT}` || 'http://localhost:3055',
-      'http://localhost:8081',
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  }),
-)
+app.use(cors())
 
 // init db
 require('./dbs/init.mongodb')
