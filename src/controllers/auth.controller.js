@@ -9,12 +9,13 @@ const Session = require('../models/session.model')
 
 exports.signup = async (req, res) => {
   try {
-    const { email, password } = req.body
+    const { username, password } = req.body
 
-    // Kiểm tra trùng email
-    const existingUser = await User.findOne({ email })
+    // Kiểm tra trùng username
+    const existingUser = await User.findOne({ name: username })
+    
     if (existingUser) {
-      return res.status(409).json({ error: 'Email already exists' })
+      return res.status(409).json({ error: 'Username already exists' })
     }
 
     // Băm mật khẩu
@@ -22,7 +23,7 @@ exports.signup = async (req, res) => {
 
     // Tạo user mới
     const newUser = new User({
-      email,
+      name: username,
       password: hashedPassword,
       roles: ['CUSTOMER'],
     })
@@ -31,15 +32,13 @@ exports.signup = async (req, res) => {
 
     res.status(201).json({
       message: 'User registered successfully',
-      user: {
-        id: newUser._id,
-        email: newUser.email,
-        roles: newUser.roles,
-        status: newUser.status,
-      },
     })
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    console.error(err);
+    if (res.statusCode !== 401) 
+      res.status(500).json({ 
+        error: "Internal Server Error"
+      })
   }
 }
 
@@ -120,7 +119,11 @@ exports.login = async (req, res) => {
       },
     })
   } catch (err) {
-    if (res.statusCode !== 401) res.status(500).json({ error: err.message })
+    console.error(err);
+    if (res.statusCode !== 401) 
+      res.status(500).json({ 
+        error: "Internal Server Error"
+      })
   }
 }
 
