@@ -88,4 +88,10 @@ router.get('/profile',
     userController.getProfile
 )
 
+router.put('/profile',
+    authMiddleware,
+    authorizeRoles(['CUSTOMER']),
+    userController.updateProfile
+)
+
 module.exports = router;
