@@ -43,7 +43,7 @@ exports.updateProfile = async (req, res) => {
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
-      { name, avatar, dob: parsedDob },
+      { fullname, avatar, dob: parsedDob },
       { new: true }
     )
 
