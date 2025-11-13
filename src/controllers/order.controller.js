@@ -11,7 +11,10 @@ exports.getMyOrders = async (req, res) => {
         .sort({ createdAt: -1 });
 
         if (!myOrders || myOrders.length === 0) {
-            return res.status(404).json({ message: "No orders found" });
+            return res.status(200).json({ 
+                message: "No orders found",
+                body: [],
+            });
         }
 
         return res.status(200).json({
@@ -19,6 +22,7 @@ exports.getMyOrders = async (req, res) => {
             body: myOrders,
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: "Internal error" });
     }
 }
