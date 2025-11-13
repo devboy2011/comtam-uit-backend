@@ -7,14 +7,32 @@ exports.getMyOrders = async (req, res) => {
     try {
         const userId = req.user.userId;
         
-        const myOrders = await Order.find({ user_id: userId })
-        .sort({ createdAt: -1 });
+        const myOrders = await Order.find({ user_id: userId}, {user_id: 0})
+            .populate({
+                path: 'products.product_id',
+                model: 'Products',
+                select: 'name price img -_id',
+                localField: 'products.product_id',
+                foreignField: 'id',
+            })
+            .sort({ createdAt: -1 })
+            .lean();
 
         if (!myOrders || myOrders.length === 0) {
             return res.status(200).json({ 
                 message: "No orders found",
                 body: [],
             });
+        }
+        
+        for (const order of myOrders){
+            for (const product of order.products){
+                product.name = product.product_id.name;
+                product.price = product.product_id.price;
+                product.img = product.product_id.img;
+                product.product_id = product.product_id.id;
+                delete product._id;
+            }
         }
 
         return res.status(200).json({
@@ -32,12 +50,30 @@ exports.getOrderById = async (req, res) => {
         const userId = req.user.userId;
         const orderId = req.params.id;
         
-        const order = await Order.find({ _id: orderId, user_id: userId });
+        const order = await Order.findOne({ _id: orderId, user_id: userId })
+            .populate({
+                path: 'products.product_id',
+                model: 'Products',
+                select: 'name price img -_id',
+                localField: 'products.product_id',
+                foreignField: 'id',
+            })
+            .lean();
         
         if (!order) {
             return res.status(404).json({ 
                 message: "Order not found" 
             });
+        }
+        
+        console.log(typeof order.products);
+        
+        for (const product of order.products){
+            product.name = product.product_id.name;
+            product.price = product.product_id.price;
+            product.img = product.product_id.img;
+            product.product_id = product.product_id.id;
+            delete product._id;
         }
 
         return res.status(200).json({
@@ -45,6 +81,7 @@ exports.getOrderById = async (req, res) => {
             body: order,
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: "Internal error" });
     }
 }
